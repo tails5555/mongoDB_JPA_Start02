@@ -37,15 +37,27 @@ public class MusicController {
 		return musicService.findByYearBetween(before, after);
 	}
 	@RequestMapping(value="insert", method=RequestMethod.POST)
-	public void insert(@RequestBody Music music) {
-		musicService.insert(music);
+	public String insert(@RequestBody Music music) {
+		if(!musicService.exists(music)) {
+			musicService.insert(music);
+			return "Music Insert Complete";
+		}
+		return "Music Insert Failure";
 	}
 	@RequestMapping(value="update", method=RequestMethod.PUT)
-	public void update(@RequestBody Music music) {
-		musicService.update(music);
+	public String update(@RequestBody Music music) {
+		if(musicService.exists(music)) {
+			musicService.update(music);
+			return "Music Update Complete";
+		}
+		return "Music Update Failure";
 	}
 	@RequestMapping(value="delete/{id}", method=RequestMethod.DELETE)
-	public void delete(@PathVariable("id") String id) {
-		musicService.delete(id);
+	public String delete(@PathVariable("id") String id) {
+		if(!musicService.findById(id).orElse(new Music()).equals(new Music())) {
+			musicService.delete(id);
+			return "Music Delete Complete";
+		}
+		return "Music Delete Failure";
 	}
 }

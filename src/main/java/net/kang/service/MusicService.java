@@ -41,6 +41,9 @@ public class MusicService {
 	public void deleteAll() {
 		musicRepository.deleteAll();
 	}
+	public boolean exists(Music music) {
+		return musicRepository.existsById(music.getId());
+	}
 	public List<Music> insertAfterFindAll(MusicForm musicForm){
 		Music newMusic=new Music();
 		newMusic.setTitle(musicForm.getTitle());
