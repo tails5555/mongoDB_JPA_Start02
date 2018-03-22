@@ -74,6 +74,22 @@ public class MusicControllerTest {
 		return tmpList;
 	}
 
+	private List<Music> findBySingerTempData(){
+		List<Music> tmpList=new ArrayList<Music>();
+		for(int k=0;k<QTY;k++) {
+			tmpList.add(initMusic(Integer.toString(k+1), String.format("Music%02d", k), "findSinger", 1900+random.nextInt(100), String.format("Genre%02d", k)));
+		}
+		return tmpList;
+	}
+
+	private List<Music> findByYearTempData(){
+		List<Music> tmpList=new ArrayList<Music>();
+		for(int k=0;k<QTY;k++) {
+			tmpList.add(initMusic(Integer.toString(k+1), String.format("Music%02d", k), String.format("Singer%02d", k), 1980+random.nextInt(10), String.format("Genre%02d", k)));
+		}
+		return tmpList;
+	}
+
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
@@ -108,6 +124,38 @@ public class MusicControllerTest {
 		.andDo(print());
 
 		verify(musicService, times(1)).findById("1");
+		verifyNoMoreInteractions(musicService);
+	}
+
+	@Test
+	public void findBySingerTest() throws Exception{
+		List<Music> findBySingerResult=findBySingerTempData();
+		when(musicService.findBySinger("findSinger")).thenReturn(findBySingerResult);
+		String toJSON=this.jsonStringFromObject(findBySingerResult);
+
+		mockMvc.perform(get("/music/findBySinger/{singer}", "findSinger"))
+		.andExpect(status().isOk())
+		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+		.andExpect(content().string(equalTo(toJSON)))
+		.andDo(print());
+
+		verify(musicService, times(1)).findBySinger("findSinger");
+		verifyNoMoreInteractions(musicService);
+	}
+
+	@Test
+	public void findByYearBetweenTest() throws Exception{
+		List<Music> findByYearResult=findByYearTempData();
+		when(musicService.findByYearBetween(1980, 1990)).thenReturn(findByYearResult);
+		String toJSON=this.jsonStringFromObject(findByYearResult);
+
+		mockMvc.perform(get("/music/findByYearBetween/{year1}/{year2}", 1980, 1990))
+		.andExpect(status().isOk())
+		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+		.andExpect(content().string(equalTo(toJSON)))
+		.andDo(print());
+
+		verify(musicService, times(1)).findByYearBetween(1980, 1990);
 		verifyNoMoreInteractions(musicService);
 	}
 
