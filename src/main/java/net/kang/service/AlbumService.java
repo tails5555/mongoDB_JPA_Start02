@@ -35,6 +35,9 @@ public class AlbumService {
 	public void deleteAll() {
 		albumRepository.deleteAll();
 	}
+	public boolean exists(Album album) {
+		return albumRepository.existsById(album.getId());
+	}
 	public List<Album> findByReleaseDateAfter(Date date) {
 		return albumRepository.findByReleaseDateAfter(date);
 	}

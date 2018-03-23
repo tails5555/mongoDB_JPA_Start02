@@ -35,15 +35,27 @@ public class AlbumController {
 		return albumService.findByReleaseDateAfter(releaseDate);
 	}
 	@RequestMapping(value="insert", method=RequestMethod.POST)
-	public void insert(@RequestBody Album album) {
-		albumService.insert(album);
+	public String insert(@RequestBody Album album) {
+		if(!albumService.exists(album)) {
+			albumService.insert(album);
+			return "Album Insert Complete";
+		}
+		return "Album Insert Failure";
 	}
 	@RequestMapping(value="update", method=RequestMethod.PUT)
-	public void update(@RequestBody Album album) {
-		albumService.update(album);
+	public String update(@RequestBody Album album) {
+		if(albumService.exists(album)) {
+			albumService.update(album);
+			return "Album Update Complete";
+		}
+		return "Album Update Failure";
 	}
 	@RequestMapping(value="delete/{id}", method=RequestMethod.DELETE)
-	public void delete(@PathVariable("id") String id) {
-		albumService.delete(id);
+	public String delete(@PathVariable("id") String id) {
+		if(!albumService.findOne(id).orElse(new Album()).equals(new Album())) {
+			albumService.delete(id);
+			return "Album Delete Complete";
+		}
+		return "Album Delete Failure";
 	}
 }

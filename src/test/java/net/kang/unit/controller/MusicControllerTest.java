@@ -94,7 +94,6 @@ public class MusicControllerTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		mockMvc=MockMvcBuilders.standaloneSetup(musicController).build();
-		when(musicService.findAll()).thenReturn(makeTempData());
 	}
 
 	@Test
