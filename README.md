@@ -75,3 +75,6 @@ MongoDB JPA 연동 연습 Act.02[MongoDB, JUnit(repository, service), Mockito Mo
 
 ## Screenshot
 ![example02_result](/src/doc/example02_result.jpg "example02_result")
+
+## Author
+- [강인성](https://github.com/tails5555)
